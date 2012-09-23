@@ -19,11 +19,11 @@ INSTALLATION
 
 
 
-Server side:
+Server side: (deploy authorized_keys to .ssh, deploy validate_rsync to ~/)
 
     install-server.sh
 
-Client side:
+Client side: (deploy id_rsa key to ~/rsync_key and chmod 400 ~/rsync_key)
     
     install-client.sh
 
@@ -31,6 +31,18 @@ Client side:
 USAGE
 -----
 
-Client side:
+Client side: (50k rsync with dir)
 
-    rsync-pro 
+    rsync -zav --bwlimit=50 -e "ssh -i ~/rsync_key" rsyncuser@remotehost:~/path/to/sync /local/path/need_to_by_synced
+
+
+UNDER DEVELOPMENT
+-----------------
+
+Some features are still under research and trail, I will make a rsyncpro 
+
+REFS
+----
+
+http://troy.jdmz.net/rsync/index.html
+
