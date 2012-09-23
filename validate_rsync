@@ -1,31 +1,45 @@
 #!/bin/sh
 
+MAX_NUM_RSYNC=10
+REJECT_MSG="Denied by Script"
+
+function if_accept()
+{
+  num=`ps aux | grep rsync | wc -l`
+  if test $num -gt $MAX_NUM_RSYNC
+  then
+    echo "Rejected current num=$num"
+  else
+    $SSH_ORIGINAL_COMMAND
+  fi
+}
+
 case "$SSH_ORIGINAL_COMMAND" in
 *\&*)
-echo "Rejected"
+echo $REJECT_MSG
 ;;
 *\(*)
-echo "Rejected"
+echo $REJECT_MSG
 ;;
 *\{*)
-echo "Rejected"
+echo $REJECT_MSG
 ;;
 *\;*)
-echo "Rejected"
+echo $REJECT_MSG
 ;;
 *\<*) 
-echo "Rejected" 
+echo $REJECT_MSG 
 ;; 
 *\`*) 
-echo "Rejected" 
+echo $REJECT_MSG 
 ;; 
 *\|*) 
-echo "Rejected" 
+echo $REJECT_MSG 
 ;; 
 rsync\ --server*) 
-$SSH_ORIGINAL_COMMAND 
+if_accept
 ;; 
 *) 
-echo "Rejected" 
+echo $REJECT_MSG 
 ;; 
 esac 
